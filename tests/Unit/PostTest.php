@@ -1,33 +1,58 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
-// use PHPUnit\Framework\TestCase;
-use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PostTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     */
-    public function test_example(): void
+    use RefreshDatabase;
+
+    /** @test */
+    public function title_is_required()
     {
-        $this->assertTrue(true);
+        // テスト用ユーザーの認証
+        $this->actingAs(User::factory()->create());
+
+        // タイトルが空で投稿を作成する（エラーを期待）
+        $response = $this->post('/post', [
+            'title' => '',
+            'body' => 'Valid body content.',
+        ]);
+
+        $response->assertSessionHasErrors('title'); // タイトルに関するエラーがあることを確認
     }
 
-    /**
-     * @test
-     */
-    public function it_belongs_to_a_user()
+    /** @test */
+    public function body_is_required()
     {
-        // テスト用ユーザーを作成
-        $user = User::factory()->create();
-        // ユーザーに紐づいたPostを作成
-        $post = Post::factory()->create(['user_id'=>$user->id]);
-        // Postのuser()メソッドがUserインスタンスを返すか確認
-        $this->assertInstanceOf(User::class,$post->user);
+        // テスト用ユーザーの認証
+        $this->actingAs(User::factory()->create());
+
+        // 本文が空で投稿を作成する（エラーを期待）
+        $response = $this->post('/post', [
+            'title' => 'Valid Title',
+            'body' => '',
+        ]);
+
+        $response->assertSessionHasErrors('body'); // 本文に関するエラーがあることを確認
+    }
+
+    /** @test */
+    public function valid_post_can_be_created()
+    {
+        // テスト用ユーザーの認証
+        $this->actingAs(User::factory()->create());
+
+        // 正しいデータで投稿を作成する
+        $response = $this->post('/post', [
+            'title' => 'Valid Title',
+            'body' => 'Valid body content.',
+        ]);
+
+        $response->assertSessionHasNoErrors(); // エラーがないことを確認
+        $response->assertRedirect(route('post.create')); // リダイレクトの確認
     }
 }
