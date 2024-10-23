@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class PostController extends Controller
 {
     /**
@@ -54,7 +54,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view('post.show',compact('post'));
     }
 
     /**
@@ -62,7 +62,13 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+
+        if (!Auth::check()) {
+            // 未認証ユーザーはトップページにリダイレクト
+            return redirect('login');
+        }
+
+        return view('post.edit',compact('post'));
     }
 
     /**
@@ -70,7 +76,23 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $inputs=$request->validate([
+            'title'=>'required|max:255',
+            'body'=>'required|max:1000',
+            'image'=>'image|max:1024'
+        ]);
+        
+        $post->title=$request->title;
+        $post->body=$request->body;
+
+        if(request('image')){
+            $original=request()->file('image')->getClientOriginalName();
+            $name=date('Ymd_His').'_'.$original;
+            $file = request()->file('image')->move('storage/images',$name);
+            $post->image=$name;
+        }
+        $post->save();
+        return redirect()->route('post.show',$post)->with('message','投稿を編集しました');
     }
 
     /**
@@ -78,6 +100,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('post.index')->with('message','投稿を削除しました');
     }
+
+
 }
