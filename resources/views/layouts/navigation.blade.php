@@ -18,6 +18,12 @@
                     <x-nav-link :href="route('post.create')" :active="request()->routeIs('post.create')">
                         新規作成
                     </x-nav-link>
+                    <x-nav-link :href="route('post.mypost')" :active="request()->routeIs('post.mypost')">
+                        自分の投稿
+                    </x-nav-link>
+                    <x-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mycomment')">
+                        コメントした投稿
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -81,12 +87,22 @@
             </x-responsive-nav-link>
         </div>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+    <!-- Responsive Navigation Menu -->
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('post.index')" :active="request()->routeIs('post.index')">
+               HOME
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('post.create')" :active="request()->routeIs('post.create')">
+                新規作成
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('post.mypost')" :active="request()->routeIs('post.mypost')">
+                自分の投稿
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mycomment')">
+                コメントした投稿
+            </x-responsive-nav-link>
+        </div>
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">

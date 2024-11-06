@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Comment;
+
 class PostController extends Controller
 {
     /**
@@ -81,7 +83,7 @@ class PostController extends Controller
             'body'=>'required|max:1000',
             'image'=>'image|max:1024'
         ]);
-        
+
         $post->title=$request->title;
         $post->body=$request->body;
 
@@ -100,9 +102,24 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $post->comments()->delete();
         $post->delete();
         return redirect()->route('post.index')->with('message','投稿を削除しました');
     }
 
+     /**
+     * 自分の投稿だけを取得、表示
+     */
+    public function mypost(){
+        $user=auth()->user()->id;
+        $posts=Post::where('user_id', $user)->orderBy('created_at', 'desc')->get();
+        return view('post.mypost', compact('posts'));
+    }
+
+    public function mycomment(){
+        $user=auth()->user()->id;
+        $comments=Comment::where('user_id',$user)->orderBy('created_at','desc')->get();
+        return view('post.mycomment', compact('comments'));
+    }
 
 }
