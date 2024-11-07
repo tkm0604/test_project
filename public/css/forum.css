@@ -8,3 +8,19 @@
     white-space: nowrap;
     background-color: green;
 }
+
+.mv-left{
+    width: 45%;
+    margin: 0 auto;
+}
+@media screen and (max-width: 767px){
+    .mv-left{
+        width: auto;
+    }
+}
+@media screen and (max-width: 1023px){
+    .mv-right{
+margin: 0 auto;
+    }
+}
+

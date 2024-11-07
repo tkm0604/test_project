@@ -2,11 +2,11 @@
     <div class="h-screen pb-14 bg-right bg-cover">
         <div class="container pt-10 md:pt-18 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center bg-yellow-50">
             <!--左側-->
-            <div class="w-full xl:w-2/5 py-6 overflow-y-hidden">
+            <div class="mv-left xl:w-1/5 py-6 overflow-y-hidden">
                 <img class="" src="{{asset('logo/site-logo.png')}}">
             </div>
             {{-- 右側 --}}
-            <div class="flex flex-col w-full xl:w-3/5 justify-center lg:items-start overflow-y-hidden ">
+            <div class="mv-right flex flex-col xl:w-2/5 justify-center lg:items-start overflow-y-hidden ">
                 <h1 class="my-4 text-3xl md:text-5xl text-green-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">独り言広場</h1>
                 <p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left slide-in-bottom-subtitle">
                     仕事や勉強の合間に、なにかをぼやく。<br>プログラマの集い場です。<br>プログラミングの話題もウェルカム♪
@@ -21,7 +21,7 @@
                 </p>
                 <div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in ">
                     {{-- ボタン設定 --}}
-                    <x-primary-button class="btnsetg">お問い合わせ</x-primary-button>
+                    <x-primary-button class="btnsetg"><a href="{{ route('contact.create') }}">お問い合わせ</a></x-primary-button>
                     <a href="{{ route('register') }}"><x-primary-button class="btnsetr">ご登録はこちら</x-primary-button></a>
 
                 </div>

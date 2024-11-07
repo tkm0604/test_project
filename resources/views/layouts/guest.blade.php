@@ -14,6 +14,8 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!--追加のスタイルシート-->
+    <link rel="stylesheet" href="{{ asset('css/forum.css') }}">
 </head>
 
 <body>
@@ -26,7 +28,7 @@
                 <div class="flex w-1/2 justify-end content-center">
                     {{-- ログイン・登録部分 --}}
                     @if (Route::has('login'))
-                        <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                        <div class="fixed top-0 right-0 px-6 py-4 sm:block">
                             @auth
                                 <a href="{{ url('/post') }}"
                                     class="text-sm text-gray-700 dark:text-gray-500 underline">HOME</a>
@@ -44,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="w-full container mx-auto p-6">
+    <div class="w-full container mx-auto">
         {{ $slot }}
     </div>
     </div>
