@@ -24,6 +24,11 @@
                     <x-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mycomment')">
                         コメントした投稿
                     </x-nav-link>
+                    @can('admin')
+                    <x-nav-link :href="route('profile.index')" :active="request()->routeIs('profile.index')">
+                        ユーザー一覧
+                    </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -102,6 +107,11 @@
             <x-responsive-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mycomment')">
                 コメントした投稿
             </x-responsive-nav-link>
+            @can('admin')
+            <x-responsive-nav-link :href="route('profile.index')" :active="request()->routeIs('profile.index')">
+                ユーザー一覧
+            </x-responsive-nav-link>
+            @endcan
         </div>
 
             <div class="mt-3 space-y-1">

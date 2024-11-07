@@ -6,7 +6,6 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
-
 class PostController extends Controller
 {
     /**
@@ -62,12 +61,11 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit(Request $request,Post $post)
     {
 
-        if (!Auth::check()) {
-            // 未認証ユーザーはトップページにリダイレクト
-            return redirect('login');
+        if($request->user()->cannot('update',$post)){
+            abort(403);
         }
 
         return view('post.edit',compact('post'));
@@ -78,6 +76,10 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if ($request->user()->cannot('update', $post)) {
+            abort(403);
+        }
+
         $inputs=$request->validate([
             'title'=>'required|max:255',
             'body'=>'required|max:1000',
@@ -100,8 +102,11 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(Request $request,Post $post)
     {
+        if($request->user()->cannot('delete',$post)){
+            abort(403);
+        }
         $post->comments()->delete();
         $post->delete();
         return redirect()->route('post.index')->with('message','投稿を削除しました');

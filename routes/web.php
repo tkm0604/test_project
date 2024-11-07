@@ -27,6 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth','can:admin'])->group(function(){
+    Route::get('profile/index',[ProfileController::class,'index'])->name('profile.index');
+});
+
 Route::get('post/mypost',[PostController::class,'mypost'])->name('post.mypost');
 Route::get('post/mycomment',[PostController::class,'mycomment'])->name('post.mycomment');
 Route::resource('post', PostController::class);
