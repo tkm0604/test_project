@@ -6,6 +6,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Storage;
+
 class PostController extends Controller
 {
     /**
@@ -89,12 +91,21 @@ class PostController extends Controller
         $post->title=$request->title;
         $post->body=$request->body;
 
+        // 古い画像の削除と新しい画像の保存
         if(request('image')){
-            $original=request()->file('image')->getClientOriginalName();
-            $name=date('Ymd_His').'_'.$original;
-            $file = request()->file('image')->move('storage/images',$name);
-            $post->image=$name;
+            //古い画像が存在する場合は削除する
+            if($post->image){
+                $oldImage = 'images/'.$post->image;
+                Storage::disk('public')->delete($oldImage);
+            }
         }
+
+        // 新しい画像のアップロード
+        $original=request()->file('image')->getClientOriginalName();
+        $name=date('Ymd_His').'_'.$original;
+        request()->file('image')->move('storage/images', $name);
+        $post->image=$name;
+
         $post->save();
         return redirect()->route('post.show',$post)->with('message','投稿を編集しました');
     }
@@ -107,6 +118,13 @@ class PostController extends Controller
         if($request->user()->cannot('delete',$post)){
             abort(403);
         }
+
+    // 投稿に紐づく画像がある場合、その画像を削除
+    if ($post->image) { // 画像が設定されているかチェック
+        $oldImage = 'images/' . $post->image;
+        Storage::disk('public')->delete($oldImage); // ストレージから画像を削除
+    }
+
         $post->comments()->delete();
         $post->delete();
         return redirect()->route('post.index')->with('message','投稿を削除しました');
