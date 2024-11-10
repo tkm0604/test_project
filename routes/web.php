@@ -32,8 +32,10 @@ Route::middleware(['verified'])->group(function(){
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // 管理者用画面
-    Route::middleware(['auth','can:admin'])->group(function(){
+    Route::middleware(['can:admin'])->group(function(){
         Route::get('profile/index',[ProfileController::class,'index'])->name('profile.index');
+        Route::get('/profile/adedit/{user}', [ProfileController::class, 'adedit'])->name('profile.adedit');
+        Route::patch('/profile/adupdate/{user}', [ProfileController::class, 'adupdate'])->name('profile.adupdate');
     });
 });
 
