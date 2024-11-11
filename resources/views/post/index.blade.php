@@ -5,11 +5,21 @@
         </h2>
 
         <x-message :message="session('message')" />
-
     </x-slot>
 
     {{-- 投稿一覧表示用のコード --}}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {{-- 並び替えリンク --}}
+                <div class="flex justify-end mt-2">
+                    <a href="{{ route('post.index',['sort'=>'desc']) }}"
+                        class="{{ request('sort') === 'desc' ? 'font-bold' : '' }}">
+                        新しい順
+                    </a>
+                    <a href="{{ route('post.index',['sort'=>'asc']) }}"
+                        class="{{ request('sort') === 'asc' ? 'font-bold' : '' }}">
+                        古い順
+                    </a>
+                </div>
         @foreach ($posts as $post)
             <div class="mx-4 sm:p-8">
                 <div class="mt-4">

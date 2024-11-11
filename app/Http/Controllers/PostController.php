@@ -13,11 +13,14 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts=Post::orderBy('created_at','desc')->get();
+        // クエリパラメータで並び替えオプションを取得
+        $sortOrder = $request->query('sort','desc'); // デフォルトは新しい順
+
+        $posts=Post::orderBy('created_at',$sortOrder)->get();
         $user=auth()->user();
-        return view('post.index',compact('posts','user'));
+        return view('post.index',compact('posts','user','sortOrder'));
     }
 
     /**
