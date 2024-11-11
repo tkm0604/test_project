@@ -44,7 +44,7 @@
                             <img src="{{ asset('storage/images/'.$post->image)}}" class="mx-auto" style="height:300px;">
                         @endif
                         <div class="text-sm font-semibold flex flex-row-reverse">
-                            <p> {{ $post->user->name}} • {{$post->created_at->diffForHumans()}}</p>
+                            <p> {{ $post->user->name??"削除されたユーザー"}} • {{$post->created_at->diffForHumans()}}</p>
                         </div>
                     </div>
                     {{-- コメント表示 --}}

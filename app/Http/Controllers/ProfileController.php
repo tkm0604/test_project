@@ -11,6 +11,7 @@ use Illuminate\View\View;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Models\Role;
 class ProfileController extends Controller
 {
 
@@ -24,8 +25,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $roles=Role::all();
         return view('profile.edit', [
             'user' => $request->user(),
+            'roles' => $roles
         ]);
     }
 
@@ -81,10 +84,12 @@ class ProfileController extends Controller
 
     public function adedit(User $user) {
         $admin=true;
+        $roles=Role::all();
 
         return view('profile.edit', [
             'user' => $user,
             'admin' => $admin,
+            'roles' => $roles,
         ]);
     }
 
@@ -114,5 +119,15 @@ class ProfileController extends Controller
         $user->save();
 
         return Redirect::route('profile.adedit', compact('user'))->with('status','profile-updated');
+    }
+
+    public function addestroy(User $user){
+        if($user->avatar !== 'user_default.jpg'){
+            $oldavatar = 'public/avatar/'.$user->avatar;
+            Storage::delete($oldavatar);
+        }
+        $user->roles()->detach();
+        $user->delete();
+        return back()->with('message','ユーザーを削除しました');
     }
 }
