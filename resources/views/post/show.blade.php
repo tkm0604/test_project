@@ -10,7 +10,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mx-4 sm:p-8">
-            <div class="px-10 mt-4">
+            <div class="px-1 mt-4">
                 <div class="rounded-full w-12 h-12">
                     {{-- アバター表示 --}}
                     <img src="{{asset('storage/avatar/'.($post->user->avatar??'user_default.jpg'))}}">
@@ -53,7 +53,7 @@
                         {{$comment->body}}
                         <div class="text-sm font-semibold flex flex-row-reverse">
                             {{-- クラスを変更 --}}
-                            <p class="float-left pt-4"> {{ $comment->user->name }} • {{$comment->created_at->diffForHumans()}}</p>
+                            <p class="float-left pt-4"> {{ $comment->user->name??"削除されたユーザー" }} • {{$comment->created_at->diffForHumans()}}</p>
                             {{-- アバター追加 --}}
                             <span class="rounded-full w-12 h-12">
                             <img src="{{asset('storage/avatar/'.($comment->user->avatar??'user_default.jpg'))}}">
@@ -61,7 +61,6 @@
                         </div>
                     </div>
                     @endforeach
-                    {{-- 追加部分 --}}
                     <div class="mt-4 mb-12">
                         <form method="post" action="{{ route('comment.store') }}">
                             @csrf
@@ -70,7 +69,6 @@
                             <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
                         </form>
                     </div>
-                    {{-- 追加部分終わり --}}
                 </div>
             </div>
         </div>

@@ -57,6 +57,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        // 投稿したユーザー以外のアクセスのみカウント
+        if(auth()->id() !== $post->user_id){
+            $post->increment('views');
+        }
         return view('post.show',compact('post'));
     }
 

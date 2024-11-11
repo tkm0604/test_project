@@ -38,6 +38,11 @@
                             @else
                                 <span>コメントはまだありません</span>
                             @endif
+                            @if(auth()->id() === $post->user_id)
+                            <div class="">
+                                <p>{{ $post->views }}人がこの投稿を閲覧しました。</p>
+                            </div>
+                            @endif
                                 <a href="{{ route('post.show', $post) }}">
                                     <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
                                 </a>
