@@ -11,9 +11,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="sm:p-8">
             <div class="px-1 mt-4">
-                <div class="rounded-full w-12 h-12">
+                <div class="rounded-full w-12 h-12 mb-2">
                     {{-- アバター表示 --}}
-                    <img src="{{asset('storage/avatar/'.($post->user->avatar??'user_default.jpg'))}}">
+                    <img class="rounded-full" src="{{asset('storage/avatar/'.($post->user->avatar??'user_default.jpg'))}}">
                 </div>
                 <div class="bg-white w-full  rounded-2xl px-3 py-8 shadow-lg hover:shadow-2xl transition duration-500">
                     <div class="mt-4">
@@ -55,7 +55,7 @@
                             <p class="float-left pt-4 text-right"> {{ $comment->user->name??"削除されたユーザー" }} • {{$comment->created_at->diffForHumans()}}</p>
                             {{-- アバター追加 --}}
                             <span class="rounded-full w-12 h-12 mb-2 inline-block ml-auto">
-                            <img src="{{asset('storage/avatar/'.($comment->user->avatar??'user_default.jpg'))}}">
+                            <img class="rounded-full" src="{{asset('storage/avatar/'.($comment->user->avatar??'user_default.jpg'))}}">
                             </span>
                         </div>
                     </div>

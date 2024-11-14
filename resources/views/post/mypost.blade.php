@@ -21,7 +21,7 @@
                         <div class="mt-4">
                             <div class="rounded-full w-12 h-12">
                                 {{-- アバター表示 --}}
-                                <img src="{{ asset('storage/avatar/' . ($post->user->avatar ?? 'user_default.jpg')) }}">
+                                <img class="rounded-full" src="{{ asset('storage/avatar/' . ($post->user->avatar ?? 'user_default.jpg')) }}">
                             </div>
                             <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer">
                                 <a href="{{ route('post.show', $post) }}">

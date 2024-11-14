@@ -4,7 +4,7 @@
             投稿の新規作成
         </h2>
 
-        <x-validation-errors class="mb-4" :errors="$errors" />
+        <x-validation-errors class="mb-3 mt-3" :errors="$errors" />
 
         <x-message :message="session('message')" />
     </x-slot>

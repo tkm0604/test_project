@@ -41,8 +41,14 @@ class PostController extends Controller
         $inputs = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required|max:1000',
-            'image' => 'image|max:1024',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
         ]);
+
+        // タイトルと本文の合計文字数チェック
+        if (mb_strlen($inputs['title'] . $inputs['body']) > 20) {
+            return back()->withErrors(['title' => 'タイトルと本文の合計は280文字以内にしてください。'])->withInput();
+        }
+
         $post = new Post();
         $post->title = $request->title;
         $post->body = $request->body;
@@ -186,7 +192,7 @@ class PostController extends Controller
         $inputs = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required|max:1000',
-            'image' => 'image|max:1024'
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
         ]);
 
         $post->title = $request->title;
