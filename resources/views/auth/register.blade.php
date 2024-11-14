@@ -1,4 +1,5 @@
 <x-guest-layout>
+    <div class="p-5">
     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
@@ -45,9 +46,17 @@
         </div>
 
         <!-- Xでログイン -->
-        <a href="{{ url('login/x') }}" class="btn btn-primary">
-            Xでログイン
-        </a>
+        <div class="block mt-4">
+            <label for="" class="inline-flex items-center">
+                <span class="ms-2 text-sm text-gray-600">
+                <!-- Xでログイン -->
+                <a href="{{ url('login/x') }}" class="btn btn-primary flex items-center">
+                    <img style="width:40px" src="{{ asset('logo/x_logo.png') }}" alt="">
+                    Xアカウントでログイン
+                </a>
+                </span>
+            </label>
+        </div>
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
@@ -59,4 +68,5 @@
             </x-primary-button>
         </div>
     </form>
+</div>
 </x-guest-layout>

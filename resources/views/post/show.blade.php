@@ -42,19 +42,19 @@
                             </div> --}}
                             <img src="{{ asset('storage/images/'.$post->image)}}" class="mx-auto" >
                         @endif
-                        <div class="text-sm font-semibold flex flex-row-reverse">
+                        <div class="text-sm font-semibold flex flex-row-reverse mt-2">
                             <p> {{ $post->user->name??"削除されたユーザー"}} • {{$post->created_at->diffForHumans()}}</p>
                         </div>
                     </div>
                     {{-- コメント表示 --}}
                     @foreach ($post->comments as $comment)
-                    <div class="bg-white w-full  rounded-2xl px-10 py-2 shadow-lg mt-8 whitespace-pre-line">
+                    <div class="bg-white w-full  rounded-2xl px-2 py-2 shadow-lg mt-4 whitespace-pre-line border">
                         {{$comment->body}}
-                        <div class="text-sm font-semibold flex flex-row-reverse">
+                        <div class="text-sm font-semibold flex flex-col-reverse">
                             {{-- クラスを変更 --}}
-                            <p class="float-left pt-4"> {{ $comment->user->name??"削除されたユーザー" }} • {{$comment->created_at->diffForHumans()}}</p>
+                            <p class="float-left pt-4 text-right"> {{ $comment->user->name??"削除されたユーザー" }} • {{$comment->created_at->diffForHumans()}}</p>
                             {{-- アバター追加 --}}
-                            <span class="rounded-full w-12 h-12">
+                            <span class="rounded-full w-12 h-12 mb-2 inline-block ml-auto">
                             <img src="{{asset('storage/avatar/'.($comment->user->avatar??'user_default.jpg'))}}">
                             </span>
                         </div>
@@ -65,7 +65,7 @@
                             @csrf
                             <input type="hidden" name='post_id' value="{{ $post->id }}">
                             <textarea name="body" class="bg-white w-full  rounded-2xl px-4 mt-4 py-4 shadow-lg hover:shadow-2xl transition duration-500" id="body" cols="30" rows="3" placeholder="コメントを入力してください">{{ old('body') }}</textarea>
-                            <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
+                            <x-primary-button class="float-right mr-4 mb-2 mt-2">コメントする</x-primary-button>
                         </form>
                     </div>
                 </div>

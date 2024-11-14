@@ -16,18 +16,18 @@
             @csrf
             <div class="md:flex items-center mt-8">
                 <div class="w-full flex flex-col">
-                <label for="title" class="font-semibold leading-none mt-4">件名</label>
+                <label for="title" class="font-semibold leading-none mt-4 mb-2">件名</label>
                 <input type="text" name="title" class="w-auto py-2 placeholder-gray-300 border border-gray-300 rounded-md" id="title" value="{{ old('title') }}" placeholder="Enter Title">
                 </div>
             </div>
 
             <div class="w-full flex flex-col">
-                <label for="body" class="font-semibold leading-none mt-4">本文</label>
+                <label for="body" class="font-semibold leading-none mt-4 mb-2">本文</label>
                 <textarea name="body" class="w-auto py-2 border border-gray-300 rounded-md" id="body" cols="30" rows="10">{{ old('body') }}</textarea>
             </div>
 
             <div class="w-full flex flex-col">
-                <label for="image" class="font-semibold leading-none mt-4">画像 </label>
+                <label for="image" class="font-semibold leading-none mt-4 mb-2">画像 </label>
                 <div>
                 <input id="image" type="file" name="image">
                 </div>

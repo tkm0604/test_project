@@ -21,7 +21,7 @@
             </a>
         </div>
         @foreach ($posts as $post)
-            <div class="mx-4 sm:p-8">
+            <div class="sm:p-8">
                 <div class="mt-4">
                     <div
                         class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500 pb-20">
@@ -37,7 +37,7 @@
                             </h1>
                             <hr class="w-full">
                             <p class="mt-4 text-gray-600 py-4">{{ Str::limit($post->body, 100, '...') }}</p>
-                            <div class="text-sm font-semibold flex flex-row-reverse">
+                            <div class="text-sm font-semibold flex flex-row-reverse mb-1">
                                 <p>{{ $post->user->name ?? '削除されたユーザー' }} • {{ $post->created_at->diffForHumans() }}</p>
                             </div>
                             <hr class="w-full mb-2">
