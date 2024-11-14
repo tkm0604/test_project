@@ -8,27 +8,27 @@
     </x-slot>
 
     {{-- 投稿一覧表示用のコード --}}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {{-- 並び替えリンク --}}
-                <div class="flex justify-end mt-2">
-                    <a href="{{ route('post.index',['sort'=>'desc']) }}"
-                        class="{{ request('sort') === 'desc' ? 'font-bold' : '' }}">
-                        新しい順
-                    </a>
-                    <a href="{{ route('post.index',['sort'=>'asc']) }}"
-                        class="{{ request('sort') === 'asc' ? 'font-bold' : '' }}">
-                        古い順
-                    </a>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        {{-- 並び替えリンク --}}
+        <div style="max-width:150px;" class="ml-auto mt-5 justify-between flex">
+            <a href="{{ route('post.index', ['sort' => 'desc']) }}"
+                class="{{ request('sort') === 'desc' ? 'font-bold' : '' }}">
+                新しい順
+            </a>
+            <a href="{{ route('post.index', ['sort' => 'asc']) }}"
+                class="{{ request('sort') === 'asc' ? 'font-bold' : '' }}">
+                古い順
+            </a>
+        </div>
         @foreach ($posts as $post)
             <div class="mx-4 sm:p-8">
                 <div class="mt-4">
                     <div
-                        class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500">
+                        class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500 pb-20">
                         <div class="mt-4">
                             <div class="rounded-full w-12 h-12">
                                 {{-- アバター表示 --}}
-                                <img src="{{asset('storage/avatar/'.($post->user->avatar??'user_default.jpg'))}}">
+                                <img src="{{ asset('storage/avatar/' . ($post->user->avatar ?? 'user_default.jpg')) }}">
                             </div>
                             <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer">
                                 <a href="{{ route('post.show', $post) }}">
@@ -36,9 +36,9 @@
                                 </a>
                             </h1>
                             <hr class="w-full">
-                            <p class="mt-4 text-gray-600 py-4">{{ Str::limit($post->body,100,'...') }}</p>
+                            <p class="mt-4 text-gray-600 py-4">{{ Str::limit($post->body, 100, '...') }}</p>
                             <div class="text-sm font-semibold flex flex-row-reverse">
-                                <p>{{ $post->user->name??"削除されたユーザー" }} • {{ $post->created_at->diffForHumans() }}</p>
+                                <p>{{ $post->user->name ?? '削除されたユーザー' }} • {{ $post->created_at->diffForHumans() }}</p>
                             </div>
                             <hr class="w-full mb-2">
                             @if ($post->comments->count())
@@ -46,20 +46,23 @@
                                     返信 {{ $post->comments->count() }} 件
                                 </span>
                             @else
-                                <span>コメントはまだありません</span>
+                                <span class="text-sm lg:text-base">コメントはまだありません</span>
                             @endif
-                            @if(auth()->id() === $post->user_id)
-                            <div class="">
-                                <p>{{ $post->views }}人がこの投稿を閲覧しました。</p>
-                            </div>
+                            @if (auth()->id() === $post->user_id)
+                                <div class="w-full mb-2">
+                                    <p class="text-sm lg:text-base">{{ $post->views }}人がこの投稿を閲覧しました。</p>
+                                </div>
                             @endif
-                                <a href="{{ route('post.show', $post) }}">
-                                    <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
-                                </a>
+                            <a href="{{ route('post.show', $post) }}">
+                                <x-primary-button
+                                    class="float-right mr-4 mb-12 text-sm lg:text-base">コメントする</x-primary-button>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         @endforeach
+        <!-- ページネーションリンクを追加 -->
+        {{ $posts->links('vendor.pagination.tailwind') }}
     </div>
 </x-app-layout>

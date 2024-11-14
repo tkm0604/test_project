@@ -20,7 +20,7 @@ class PostController extends Controller
         // クエリパラメータで並び替えオプションを取得
         $sortOrder = $request->query('sort', 'desc'); // デフォルトは新しい順
 
-        $posts = Post::orderBy('created_at', $sortOrder)->get();
+        $posts = Post::orderBy('created_at', $sortOrder)->latest()->paginate(10); // 1ページに10件表示
         $user = auth()->user();
         return view('post.index', compact('posts', 'user', 'sortOrder'));
     }
@@ -237,14 +237,16 @@ class PostController extends Controller
     public function mypost()
     {
         $user = auth()->user()->id;
-        $posts = Post::where('user_id', $user)->orderBy('created_at', 'desc')->get();
+        $posts = Post::where('user_id', $user)->latest()->paginate(10); // 1ページに10件表示
         return view('post.mypost', compact('posts'));
     }
 
     public function mycomment()
     {
         $user = auth()->user()->id;
-        $comments = Comment::where('user_id', $user)->orderBy('created_at', 'desc')->get();
+        // $comments = Comment::where('user_id', $user)->orderBy('created_at', 'desc')->get();
+        $comments = Comment::where('user_id', $user)->latest()->paginate(10); // 1ページに10件表示
+
         return view('post.mycomment', compact('comments'));
     }
 }
