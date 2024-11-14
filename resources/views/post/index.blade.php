@@ -24,7 +24,7 @@
             <div class="sm:p-8">
                 <div class="mt-4">
                     <div
-                        class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500 pb-10">
+                        class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500 pb-14">
                         <div class="mt-4">
                             <div class="rounded-full w-12 h-12">
                                 {{-- アバター表示 --}}

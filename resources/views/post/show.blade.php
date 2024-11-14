@@ -8,6 +8,7 @@
 
     </x-slot>
 
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="sm:p-8">
             <div class="px-1 mt-4">
@@ -26,13 +27,18 @@
                         @can('update',$post)
                         <a href="{{route('post.edit', $post)}}"><x-primary-button class="bg-teal-700 float-right">編集</x-primary-button></a>
                        @endcan
-                       @can('update',$post)
+
+                    @php
+                        $isRole3User = auth()->check() && auth()->user()->role_id === 3; // 役割がid=3か確認
+                    @endphp
+
+                    @if($isAdmin || $isRole3User || auth()->user()->can('update', $post))
                         <form method="post" action="{{route('post.destroy', $post)}}">
                             @csrf
                             @method('delete')
                             <x-primary-button class="bg-red-700 float-right ml-4" onClick="return confirm('本当に削除しますか？');">削除</x-primary-button>
                         </form>
-                        @endcan
+                        @endif
                     </div>
                     <div>
                         <p class="mt-4 text-gray-600 py-4">{{$post->body}}</p>

@@ -9,7 +9,8 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Storage;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\Role;
+use App\Models\User;
 class PostController extends Controller
 {
     /**
@@ -158,18 +159,22 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Post $post,User $user)
     {
     // カウントをセッションで制御
     $viewedPosts = session()->get('viewed_posts', []);
-    
+
     // 投稿したユーザー以外、かつ未カウントの場合のみカウント
     if (auth()->id() !== $post->user_id && !in_array($post->id, $viewedPosts)) {
         $post->increment('views');
         session()->push('viewed_posts', $post->id); // カウント済みに設定
     }
+    $isAdmin = auth()->check() && auth()->user()->roles->contains('id', 3);
 
-        return view('post.show', compact('post'));
+    return view('post.show', [
+        'post' => $post,
+        'isAdmin' => $isAdmin,
+    ]);
     }
 
     /**
