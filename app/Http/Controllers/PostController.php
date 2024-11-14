@@ -80,17 +80,16 @@ class PostController extends Controller
 
 
 
-    public function postTweet($title, $body, $imagePath = null)
+    public function postTweet($title, $body, $imagePath=null)
     {
-
         $user = auth()->user();
 
-        // ユーザーごとのトークンを使用してTwitterOAuthインスタンスを作成
+        // 認証情報を取得してTwitterOAuthインスタンスを作成
         $twitter = new TwitterOAuth(
             env('TWITTER_CLIENT_ID'),
             env('TWITTER_CLIENT_SECRET'),
             $user->twitter_token,
-            $user->twitter_token_secret
+           	$user->twitter_token_secret
         );
 
         // APIバージョンをv1.1に設定
@@ -105,7 +104,7 @@ class PostController extends Controller
                 $mediaId = $media->media_id_string ?? null;
 
                 if (!$mediaId) {
-                    Log::error('メディアIDが取得できませんでした。アップロード結果:' . json_encode($media));
+                    Log::error('メディアIDが取得できませんでした。アップロード結果:' .json_encode($media));
                     return false;
                 }
             } catch (\Exception $e) {
@@ -128,7 +127,7 @@ class PostController extends Controller
         ];
 
         // 画像がある場合、media_idsに追加
-        if ($mediaId) {
+        if($mediaId){
             $tweetContent['media'] = [
                 'media_ids' => [$mediaId]
             ];
@@ -136,7 +135,7 @@ class PostController extends Controller
 
 
         // Twitterに投稿 (v2 エンドポイント)
-        try {
+            try {
             // v2エンドポイントを指定し、JSONリクエストに設定
             $response = $twitterV2->post('tweets', $tweetContent);
 
