@@ -160,10 +160,15 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        // 投稿したユーザー以外のアクセスのみカウント
-        if (auth()->id() !== $post->user_id) {
-            $post->increment('views');
-        }
+    // カウントをセッションで制御
+    $viewedPosts = session()->get('viewed_posts', []);
+    
+    // 投稿したユーザー以外、かつ未カウントの場合のみカウント
+    if (auth()->id() !== $post->user_id && !in_array($post->id, $viewedPosts)) {
+        $post->increment('views');
+        session()->push('viewed_posts', $post->id); // カウント済みに設定
+    }
+
         return view('post.show', compact('post'));
     }
 

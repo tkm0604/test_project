@@ -20,7 +20,7 @@
                 <div class="sm:p-8">
                     <div class="mt-4">
                         <div
-                        class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500">
+                        class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500 pb-10">
                         <div class="mt-4">
                             <div class="rounded-full w-12 h-12">
                                 {{-- アバター表示 --}}
@@ -51,7 +51,7 @@
                             @endif
                             <a href="{{ route('post.show', $post) }}">
                                 <x-primary-button
-                                    class="float-right mr-4 text-sm lg:text-base">コメントする</x-primary-button>
+                                    class="float-right m-0 text-sm lg:text-base">コメントする</x-primary-button>
                             </a>
                         </div>
                     </div>

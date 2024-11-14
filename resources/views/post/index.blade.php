@@ -24,7 +24,7 @@
             <div class="sm:p-8">
                 <div class="mt-4">
                     <div
-                        class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500 pb-20">
+                        class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500 pb-10">
                         <div class="mt-4">
                             <div class="rounded-full w-12 h-12">
                                 {{-- アバター表示 --}}
@@ -48,14 +48,14 @@
                             @else
                                 <span class="text-sm lg:text-base">コメントはまだありません</span>
                             @endif
-                            @if (auth()->id() === $post->user_id)
+                            @if (auth()->id() === $post->user_id && $post->views !== 0)
                                 <div class="w-full mb-2">
                                     <p class="text-sm lg:text-base">{{ $post->views }}人がこの投稿を閲覧しました。</p>
                                 </div>
                             @endif
                             <a href="{{ route('post.show', $post) }}">
                                 <x-primary-button
-                                    class="float-right mr-4 mb-12 text-sm lg:text-base">コメントする</x-primary-button>
+                                    class="float-right m-0 text-sm lg:text-base">コメントする</x-primary-button>
                             </a>
                         </div>
                     </div>
