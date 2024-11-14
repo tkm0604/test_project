@@ -32,6 +32,8 @@ class SocialAuthController extends Controller
                 'name' => $socialUser->getName(),
                 'email' => $socialUser->getEmail() ?? $socialUser->getId() . '@temp.example.com',
                 'email_verified_at' => Carbon::now(), // メール認証済みに設定
+                'twitter_token' => $socialUser->token, // OAuth トークン保存
+                'twitter_token_secret' => $socialUser->tokenSecret, // OAuth トークンシークレット保存
             ]);
         } else {
             // 既存ユーザーの場合、twitter_idとメール認証を確実に更新

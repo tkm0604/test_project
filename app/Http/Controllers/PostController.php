@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Storage;
+use Abraham\TwitterOAuth\TwitterOAuth;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -16,11 +18,11 @@ class PostController extends Controller
     public function index(Request $request)
     {
         // クエリパラメータで並び替えオプションを取得
-        $sortOrder = $request->query('sort','desc'); // デフォルトは新しい順
+        $sortOrder = $request->query('sort', 'desc'); // デフォルトは新しい順
 
-        $posts=Post::orderBy('created_at',$sortOrder)->get();
-        $user=auth()->user();
-        return view('post.index',compact('posts','user','sortOrder'));
+        $posts = Post::orderBy('created_at', $sortOrder)->get();
+        $user = auth()->user();
+        return view('post.index', compact('posts', 'user', 'sortOrder'));
     }
 
     /**
@@ -36,24 +38,116 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs=$request->validate([
-            'title'=>'required|max:255',
-            'body'=>'required|max:1000',
-            'image'=>'image|max:1024',
+        $inputs = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required|max:1000',
+            'image' => 'image|max:1024',
         ]);
-        $post=new Post();
-        $post->title=$request->title;
-        $post->body=$request->body;
-        $post->user_id=auth()->user()->id;
-        if(request('image')){
+        $post = new Post();
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->user_id = auth()->user()->id;
+
+        $imagePath = null; // 初期化
+
+        if (request('image')) {
             $original = request()->file('image')->getClientOriginalName();
-            $name = date('Ymd_His').'_'.$original;
-            request()->file('image')->move('storage/images',$name);
+            $name = date('Ymd_His') . '_' . $original;
+            request()->file('image')->move('storage/images', $name);
             $post->image = $name;
+            $imagePath = storage_path('app/public/images/' . $name);
         }
         $post->save();
-        return redirect()->route('post.create')->with('message','投稿を作成しました');
+
+        // Twitterに投稿
+        $tweetResult =
+            // 正しい画像パスを渡してTwitterに投稿
+            $this->postTweet($post->title, $post->body, $imagePath);
+
+
+        // 成功・失敗メッセージを表示
+        $message = $tweetResult ? '投稿を作成し、Xへも投稿しました' : '投稿を作成しましたが、Xへの投稿に失敗しました';
+        return redirect()->route('post.create')->with('message',  $message);
     }
+
+
+
+
+    public function postTweet($title, $body, $imagePath = null)
+    {
+
+        $user = auth()->user();
+
+        // ユーザーごとのトークンを使用してTwitterOAuthインスタンスを作成
+        $twitter = new TwitterOAuth(
+            env('TWITTER_CLIENT_ID'),
+            env('TWITTER_CLIENT_SECRET'),
+            $user->twitter_token,
+            $user->twitter_token_secret
+        );
+
+        // APIバージョンをv1.1に設定
+        $twitter->setApiVersion('1.1');
+
+        // 画像がある場合、画像をTwitterへアップロードしてメディアIDを取得
+        $mediaId = null;
+        if ($imagePath) {
+            try {
+                // 画像をアップロードしてメディアIDを取得
+                $media = $twitter->upload('media/upload', ['media' => $imagePath]);
+                $mediaId = $media->media_id_string ?? null;
+
+                if (!$mediaId) {
+                    Log::error('メディアIDが取得できませんでした。アップロード結果:' . json_encode($media));
+                    return false;
+                }
+            } catch (\Exception $e) {
+                Log::error('Twitterへの画像アップロードに失敗しました: ' . $e->getMessage());
+                return false;
+            }
+        }
+
+        // v2用のTwitterOAuthインスタンスを新しく作成
+        $twitterV2 = new TwitterOAuth(
+            env('TWITTER_CLIENT_ID'),
+            env('TWITTER_CLIENT_SECRET'),
+            $user->twitter_token,
+            $user->twitter_token_secret
+        );
+
+        // v2エンドポイントのツイート内容
+        $tweetContent = [
+            "text" => $title . "\n" . $body
+        ];
+
+        // 画像がある場合、media_idsに追加
+        if ($mediaId) {
+            $tweetContent['media'] = [
+                'media_ids' => [$mediaId]
+            ];
+        }
+
+
+        // Twitterに投稿 (v2 エンドポイント)
+        try {
+            // v2エンドポイントを指定し、JSONリクエストに設定
+            $response = $twitterV2->post('tweets', $tweetContent);
+
+            // レスポンスのHTTPコードを確認
+            if ($twitterV2->getLastHttpCode() == 201) {
+                Log::info('Twitterへの投稿に成功しました: ' . json_encode($response));
+                return true;
+            } else {
+                Log::error('Twitterへの投稿に失敗しました: ' . json_encode($response));
+                return false;
+            }
+        } catch (\Exception $e) {
+            // エラーが発生した場合の処理
+            Log::error('例外が発生しました: ' . $e->getMessage());
+            return false;
+        }
+    }
+
 
     /**
      * Display the specified resource.
@@ -61,23 +155,23 @@ class PostController extends Controller
     public function show(Post $post)
     {
         // 投稿したユーザー以外のアクセスのみカウント
-        if(auth()->id() !== $post->user_id){
+        if (auth()->id() !== $post->user_id) {
             $post->increment('views');
         }
-        return view('post.show',compact('post'));
+        return view('post.show', compact('post'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request,Post $post)
+    public function edit(Request $request, Post $post)
     {
 
-        if($request->user()->cannot('update',$post)){
+        if ($request->user()->cannot('update', $post)) {
             abort(403);
         }
 
-        return view('post.edit',compact('post'));
+        return view('post.edit', compact('post'));
     }
 
     /**
@@ -89,67 +183,68 @@ class PostController extends Controller
             abort(403);
         }
 
-        $inputs=$request->validate([
-            'title'=>'required|max:255',
-            'body'=>'required|max:1000',
-            'image'=>'image|max:1024'
+        $inputs = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required|max:1000',
+            'image' => 'image|max:1024'
         ]);
 
-        $post->title=$request->title;
-        $post->body=$request->body;
+        $post->title = $request->title;
+        $post->body = $request->body;
 
         // 古い画像の削除と新しい画像の保存
-        if(request('image')){
+        if (request('image')) {
             //古い画像が存在する場合は削除する
-            if($post->image){
-                $oldImage = 'images/'.$post->image;
+            if ($post->image) {
+                $oldImage = 'images/' . $post->image;
                 Storage::disk('public')->delete($oldImage);
             }
         }
 
         // 新しい画像のアップロード
-        $original=request()->file('image')->getClientOriginalName();
-        $name=date('Ymd_His').'_'.$original;
+        $original = request()->file('image')->getClientOriginalName();
+        $name = date('Ymd_His') . '_' . $original;
         request()->file('image')->move('storage/images', $name);
-        $post->image=$name;
+        $post->image = $name;
 
         $post->save();
-        return redirect()->route('post.show',$post)->with('message','投稿を編集しました');
+        return redirect()->route('post.show', $post)->with('message', '投稿を編集しました');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request,Post $post)
+    public function destroy(Request $request, Post $post)
     {
-        if($request->user()->cannot('delete',$post)){
+        if ($request->user()->cannot('delete', $post)) {
             abort(403);
         }
 
-    // 投稿に紐づく画像がある場合、その画像を削除
-    if ($post->image) { // 画像が設定されているかチェック
-        $oldImage = 'images/' . $post->image;
-        Storage::disk('public')->delete($oldImage); // ストレージから画像を削除
-    }
+        // 投稿に紐づく画像がある場合、その画像を削除
+        if ($post->image) { // 画像が設定されているかチェック
+            $oldImage = 'images/' . $post->image;
+            Storage::disk('public')->delete($oldImage); // ストレージから画像を削除
+        }
 
         $post->comments()->delete();
         $post->delete();
-        return redirect()->route('post.index')->with('message','投稿を削除しました');
+        return redirect()->route('post.index')->with('message', '投稿を削除しました');
     }
 
-     /**
+    /**
      * 自分の投稿だけを取得、表示
      */
-    public function mypost(){
-        $user=auth()->user()->id;
-        $posts=Post::where('user_id', $user)->orderBy('created_at', 'desc')->get();
+    public function mypost()
+    {
+        $user = auth()->user()->id;
+        $posts = Post::where('user_id', $user)->orderBy('created_at', 'desc')->get();
         return view('post.mypost', compact('posts'));
     }
 
-    public function mycomment(){
-        $user=auth()->user()->id;
-        $comments=Comment::where('user_id',$user)->orderBy('created_at','desc')->get();
+    public function mycomment()
+    {
+        $user = auth()->user()->id;
+        $comments = Comment::where('user_id', $user)->orderBy('created_at', 'desc')->get();
         return view('post.mycomment', compact('comments'));
     }
-
 }
