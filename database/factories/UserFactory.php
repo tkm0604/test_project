@@ -24,13 +24,27 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'avatar' => $this->faker->imageUrl(100, 100, 'people', true, 'Avatar'),
+            'password' => bcrypt('password'),
+            'twitter_id' => $this->faker->optional()->numerify('#######'), // ランダム値またはnull
+            'twitter_token' => $this->faker->optional()->lexify(Str::random(32)), // ランダム文字列またはnull
+            'twitter_token_secret' => $this->faker->optional()->lexify(Str::random(32)), // ランダム文字列またはnull
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
         ];
     }
+   // Twitter関連フィールドを空（null）にする状態
+   public function withoutTwitter(): static
+   {
+       return $this->state(function (array $attributes) {
+           return [
+               'twitter_id' => null,
+               'twitter_token' => null,
+               'twitter_token_secret' => null,
+           ];
+       });
+   }
 
     /**
      * Indicate that the model's email address should be unverified.

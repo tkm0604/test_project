@@ -24,7 +24,7 @@ class SocialAuthController extends Controller
         $socialUser = Socialite::driver('twitter')->user();
 
         //仮のメールアドレスを生成
-        $tempEmail = $socialUser->getId(). '@temp.example.com';
+        $tempEmail = $socialUser->getId(). '@temp.example.com'; //mailカラムがrequireのため仮のアドレス登録
 
         // まず、`twitter_id`で検索し、なければ`email`で検索
         $user = User::where('twitter_id',$socialUser->getId())

@@ -9,10 +9,12 @@ return [
     ],
     'image' => ':attribute は 2MB 以下の画像ファイルである必要があります。',
     'mimes' => ':attribute は :values の形式である必要があります。',
+    'email' => ':attribute は有効なメールアドレス形式である必要があります。',
 
     'attributes' => [
         'title' => '件名',
         'body' => '本文',
-        'image' => '画像'
+        'image' => '画像',
+        'email' => 'メールアドレス',
     ]
 ];

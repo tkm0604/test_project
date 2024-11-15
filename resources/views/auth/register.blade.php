@@ -47,12 +47,13 @@
 
         <!-- Xでログイン -->
         <div class="block mt-4">
+            <p class="ms-2 text-m font-bold text-[#1DA1F2]">Xアカウントでユーザー登録される方はこちら</p>
             <label for="" class="inline-flex items-center">
                 <span class="ms-2 text-sm text-gray-600">
                 <!-- Xでログイン -->
                 <a href="{{ url('login/x') }}" class="btn btn-primary flex items-center">
                     <img style="width:40px" src="{{ asset('logo/x_logo.png') }}" alt="">
-                    Xアカウントでログイン
+                    Xアカウントでユーザー登録
                 </a>
                 </span>
             </label>

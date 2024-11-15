@@ -13,10 +13,10 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->sentence,
-            'body' => $this->faker->paragraph,
-            'image' => null,
-            'user_id' => User::factory(), // UserFactoryでユーザーを作成し、紐づける
+            'title' => $this->faker->sentence, // ランダムなタイトル
+            'body' => $this->faker->paragraph, // ランダムな本文
+            'user_id' => \App\Models\User::factory(), // 関連するユーザーを生成
+            'image' => $this->faker->imageUrl(640, 480, 'nature', true, 'Image'), // ランダムな画像URL
         ];
     }
 }

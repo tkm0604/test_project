@@ -64,16 +64,20 @@ class PostController extends Controller
             $post->image = $name;
             $imagePath = storage_path('app/public/images/' . $name);
         }
-        $post->save();
+        if ($post->save()) {
+            // 保存が成功した場合
+            $message = 'ぼやきが投稿されました';
+        } else {
+            // 保存が失敗した場合
+            $message = 'ぼやき投稿に失敗しました';
+        } 
 
-        // Twitterに投稿
-        $tweetResult =
+            // Twitterに投稿
             // 正しい画像パスを渡してTwitterに投稿
             $this->postTweet($post->title, $post->body, $imagePath);
 
 
         // 成功・失敗メッセージを表示
-        $message = $tweetResult ? '投稿を作成し、Xへも投稿しました' : '投稿を作成しましたが、Xへの投稿に失敗しました';
         return redirect()->route('post.create')->with('message',  $message);
     }
 

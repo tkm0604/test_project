@@ -7,7 +7,7 @@
             </div>
             {{-- 右側 --}}
             <div class="mv-right flex flex-col xl:w-2/5 justify-center lg:items-start overflow-y-hidden ">
-                <h1 class="my-4 text-3xl md:text-5xl text-green-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">独り言広場</h1>
+                <h1 class="my-4 text-3xl md:text-5xl text-green-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">ぼやきの広場</h1>
                 <p class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left slide-in-bottom-subtitle">
                     仕事や勉強の合間に、なにかをぼやく。<br>プログラマの集い場です。<br>プログラミングの話題もウェルカム♪
                 </p>
