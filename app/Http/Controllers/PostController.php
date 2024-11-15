@@ -46,7 +46,7 @@ class PostController extends Controller
         ]);
 
         // タイトルと本文の合計文字数チェック
-        if (mb_strlen($inputs['title'] . $inputs['body']) > 20) {
+        if (mb_strlen($inputs['title'] . $inputs['body']) > 280) {
             return back()->withErrors(['title' => 'タイトルと本文の合計は280文字以内にしてください。'])->withInput();
         }
 
@@ -203,6 +203,11 @@ class PostController extends Controller
             'body' => 'required|max:1000',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
         ]);
+
+        // タイトルと本文の合計文字数チェック
+        if (mb_strlen($inputs['title'] . $inputs['body']) > 280) {
+            return back()->withErrors(['title' => 'タイトルと本文の合計は280文字以内にしてください。'])->withInput();
+        }
 
         $post->title = $request->title;
         $post->body = $request->body;
