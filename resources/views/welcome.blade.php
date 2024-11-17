@@ -28,9 +28,9 @@
             </div>
         </div>
         <div class="container pt-10 md:pt-18 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-            <div class="w-full text-sm text-center md:text-left fade-in border-2 p-4 text-red-800 leading-8 mb-8">
+            {{-- <div class="w-full text-sm text-center md:text-left fade-in border-2 p-4 text-red-800 leading-8 mb-8">
                 <P> ここは色々いれてください。</p>
-            </div>
+            </div> --}}
             <!--フッタ-->
             <div class="w-full pt-10 pb-6 text-sm md:text-left fade-in">
                 <p class="text-gray-500 text-center">@2024 独り言広場</p>
