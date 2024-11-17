@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
-
+use Carbon\Carbon;
 
 class RegisteredUserController extends Controller
 {
@@ -49,7 +49,8 @@ class RegisteredUserController extends Controller
         if (request()->hasFile('avatar')) {
             $name = request()->file('avatar')->getClientOriginalName();
             $avatar = date('Ymd_His').'_'.$name;
-            request()->file('avatar')->move('storage/avatar',$avatar);
+            // request()->file('avatar')->move('storage/avatar',$avatar);
+            $request->file('avatar')->storeAs('avatar', $avatar, 'public'); // `public`ディスクを使用
             // avatarファイル名をデータに追加
             $attr['avatar'] = $avatar;
         }

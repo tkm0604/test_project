@@ -9,6 +9,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Middleware\VerifyCsrfToken;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -59,10 +62,6 @@ Route::middleware(['auth', 'verified'])->group(function() {
 // X(Twitter)の認証用ルート
 Route::get('login/x', [SocialAuthController::class, 'redirectToProvider']);
 Route::get('login/x/callback', [SocialAuthController::class, 'handleProviderCallback']);
-
-
-
-
 
 
 require __DIR__.'/auth.php';
