@@ -70,7 +70,7 @@ class PostController extends Controller
         } else {
             // 保存が失敗した場合
             $message = 'ぼやき投稿に失敗しました';
-        } 
+        }
 
             // Twitterに投稿
             // 正しい画像パスを渡してTwitterに投稿
@@ -172,7 +172,7 @@ class PostController extends Controller
         $post->increment('views');
         session()->push('viewed_posts', $post->id); // カウント済みに設定
     }
-    $isAdmin = auth()->check() && auth()->user()->roles->contains('id', 3);
+    $isAdmin = auth()->check() && auth()->user()->roles->contains('id', 1);
 
     return view('post.show', [
         'post' => $post,

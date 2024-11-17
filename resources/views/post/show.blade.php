@@ -12,11 +12,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="sm:p-8">
             <div class="px-1 mt-4">
-                <div class="rounded-full w-12 h-12 mb-2">
-                    {{-- アバター表示 --}}
-                    <img class="rounded-full" src="{{asset('storage/avatar/'.($post->user->avatar??'user_default.jpg'))}}">
-                </div>
+
                 <div class="bg-white w-full  rounded-2xl px-3 py-8 shadow-lg hover:shadow-2xl transition duration-500">
+                    <div class="rounded-full w-12 h-12" style="height: auto;">
+                        {{-- アバター表示 --}}
+                        <img class="rounded-full" src="{{ asset('storage/avatar/' . ($post->user->avatar ?? 'user_default.jpg')) }}">
+                    </div>
                     <div class="mt-4">
                         <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer">
                         <a href="{{route('post.show', $post)}}">{{ $post->title }}</a>

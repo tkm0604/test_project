@@ -22,7 +22,7 @@
                         <div
                         class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500 pb-10">
                         <div class="mt-4">
-                            <div class="rounded-full w-12 h-12">
+                            <div class="rounded-full w-12 h-12" style="height: auto;">
                                 {{-- アバター表示 --}}
                                 <img class="rounded-full" src="{{ asset('storage/avatar/' . ($post->user->avatar ?? 'user_default.jpg')) }}">
                             </div>
