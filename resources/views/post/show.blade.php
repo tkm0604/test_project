@@ -9,7 +9,7 @@
     </x-slot>
 
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
         <div class="sm:p-8">
             <div class="px-1 mt-4">
 

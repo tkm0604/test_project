@@ -9,7 +9,7 @@
     </x-slot>
 
     {{-- 投稿一覧表示用のコード --}}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 pb-6 sm:px-6 lg:px-8">
         @if (count($posts) === 0)
         <p class="mt-4">投稿がありません。</p>
         @else
@@ -48,7 +48,7 @@
                             @endif
                             <a href="{{ route('post.show', $post) }}">
                                 <x-primary-button
-                                    class="float-right m-0 text-sm lg:text-base">コメントする</x-primary-button>
+                                    class="float-right m-0 text-sm">コメントする</x-primary-button>
                             </a>
                         </div>
                     </div>

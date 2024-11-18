@@ -55,7 +55,7 @@
                             @endif
                             <a href="{{ route('post.show', $post) }}">
                                 <x-primary-button
-                                    class="float-right m-0 text-sm lg:text-base">コメントする</x-primary-button>
+                                    class="float-right m-0 text-sm">コメントする</x-primary-button>
                             </a>
                         </div>
                     </div>
