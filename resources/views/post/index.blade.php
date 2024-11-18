@@ -42,7 +42,7 @@
                             </div>
                             <hr class="w-full mb-2">
                             @if ($post->comments->count())
-                                <span class="badge">
+                                <span class="badge mb-1">
                                     返信 {{ $post->comments->count() }} 件
                                 </span>
                             @else

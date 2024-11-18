@@ -9,31 +9,31 @@
         <x-message :message="session('message')" />
     </x-slot>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-7">
+<div class="max-w-7xl mx-auto px-4 pt-6 pb-8 lg:px-8">
     <div class="mx-4 sm:p-8">
         <form method="post" action="{{route('post.update',$post)}}" enctype="multipart/form-data">
             @csrf
             @method('patch')
             <div class="md:flex items-center mt-8">
                 <div class="w-full flex flex-col">
-                <label for="title" class="font-semibold leading-none mt-4">件名</label>
+                <label for="title" class="font-semibold leading-none mt-4 mb-1">件名</label>
                 <input type="text" name="title" class="w-auto py-2 placeholder-gray-300 border border-gray-300 rounded-md" id="title" value="{{ old('title',$post->title) }}" placeholder="Enter Title">
                 </div>
             </div>
 
             <div class="w-full flex flex-col">
-                <label for="body" class="font-semibold leading-none mt-4">本文</label>
+                <label for="body" class="font-semibold leading-none mt-4 mb-1">本文</label>
                 <textarea name="body" class="w-auto py-2 border border-gray-300 rounded-md" id="body" cols="30" rows="10">{{ old('body',$post->body) }}</textarea>
             </div>
 
-            <div class="w-full flex flex-col">
+            <div class="w-full flex flex-col mt-2">
                 @if($post->image)
                 <div>
                     （画像ファイル:{{ $post->image }}）
                 </div>
                 <img src="{{ asset('storage/images/'.$post->image) }}" alt="">
                 @endif
-                <label for="image" class="font-semibold leading-none mt-4">画像(1MBまで) </label>
+                <label for="image" class="font-semibold leading-none my-4">画像(1MBまで) </label>
                 <div>
                 <input id="image" type="file" name="image">
                 </div>
