@@ -9,7 +9,7 @@
     </x-slot>
 
     {{-- 投稿一覧表示用のコード --}}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-7">
         @if (count($comments) === 0)
         <p class="mt-4">投稿がありません。</p>
         @else

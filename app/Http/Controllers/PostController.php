@@ -11,6 +11,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Role;
 use App\Models\User;
+
 class PostController extends Controller
 {
     /**
@@ -72,9 +73,9 @@ class PostController extends Controller
             $message = 'ぼやき投稿に失敗しました';
         }
 
-            // Twitterに投稿
-            // 正しい画像パスを渡してTwitterに投稿
-            $this->postTweet($post->title, $post->body, $imagePath);
+        // Twitterに投稿
+        // 正しい画像パスを渡してTwitterに投稿
+        $this->postTweet($post->title, $post->body, $imagePath);
 
 
         // 成功・失敗メッセージを表示
@@ -84,7 +85,7 @@ class PostController extends Controller
 
 
 
-    public function postTweet($title, $body, $imagePath=null)
+    public function postTweet($title, $body, $imagePath = null)
     {
         $user = auth()->user();
 
@@ -93,7 +94,7 @@ class PostController extends Controller
             env('TWITTER_CLIENT_ID'),
             env('TWITTER_CLIENT_SECRET'),
             $user->twitter_token,
-           	$user->twitter_token_secret
+            $user->twitter_token_secret
         );
 
         // APIバージョンをv1.1に設定
@@ -108,7 +109,7 @@ class PostController extends Controller
                 $mediaId = $media->media_id_string ?? null;
 
                 if (!$mediaId) {
-                    Log::error('メディアIDが取得できませんでした。アップロード結果:' .json_encode($media));
+                    Log::error('メディアIDが取得できませんでした。アップロード結果:' . json_encode($media));
                     return false;
                 }
             } catch (\Exception $e) {
@@ -131,7 +132,7 @@ class PostController extends Controller
         ];
 
         // 画像がある場合、media_idsに追加
-        if($mediaId){
+        if ($mediaId) {
             $tweetContent['media'] = [
                 'media_ids' => [$mediaId]
             ];
@@ -139,7 +140,7 @@ class PostController extends Controller
 
 
         // Twitterに投稿 (v2 エンドポイント)
-            try {
+        try {
             // v2エンドポイントを指定し、JSONリクエストに設定
             $response = $twitterV2->post('tweets', $tweetContent);
 
@@ -162,22 +163,22 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post,User $user)
+    public function show(Post $post, User $user)
     {
-    // カウントをセッションで制御
-    $viewedPosts = session()->get('viewed_posts', []);
+        // カウントをセッションで制御
+        $viewedPosts = session()->get('viewed_posts', []);
 
-    // 投稿したユーザー以外、かつ未カウントの場合のみカウント
-    if (auth()->id() !== $post->user_id && !in_array($post->id, $viewedPosts)) {
-        $post->increment('views');
-        session()->push('viewed_posts', $post->id); // カウント済みに設定
-    }
-    $isAdmin = auth()->check() && auth()->user()->roles->contains('id', 1);
+        // 投稿したユーザー以外、かつ未カウントの場合のみカウント
+        if (auth()->id() !== $post->user_id && !in_array($post->id, $viewedPosts)) {
+            $post->increment('views');
+            session()->push('viewed_posts', $post->id); // カウント済みに設定
+        }
+        $isAdmin = auth()->check() && auth()->user()->roles->contains('id', 1);
 
-    return view('post.show', [
-        'post' => $post,
-        'isAdmin' => $isAdmin,
-    ]);
+        return view('post.show', [
+            'post' => $post,
+            'isAdmin' => $isAdmin,
+        ]);
     }
 
     /**
@@ -217,19 +218,19 @@ class PostController extends Controller
         $post->body = $request->body;
 
         // 古い画像の削除と新しい画像の保存
-        if (request('image')) {
+        if ($request->hasFile('image')) {
             //古い画像が存在する場合は削除する
             if ($post->image) {
                 $oldImage = 'images/' . $post->image;
                 Storage::disk('public')->delete($oldImage);
             }
-        }
 
-        // 新しい画像のアップロード
-        $original = request()->file('image')->getClientOriginalName();
-        $name = date('Ymd_His') . '_' . $original;
-        request()->file('image')->move('storage/images', $name);
-        $post->image = $name;
+            // 新しい画像のアップロード
+            $original = request()->file('image')->getClientOriginalName();
+            $name = date('Ymd_His') . '_' . $original;
+            request()->file('image')->move('storage/images', $name);
+            $post->image = $name;
+        }
 
         $post->save();
         return redirect()->route('post.show', $post)->with('message', '投稿を編集しました');

@@ -9,8 +9,7 @@
         <x-message :message="session('message')" />
     </x-slot>
 
-{{-- 最初に作成した部分 --}}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-7">
     <div class="mx-4 sm:p-8">
         <form method="post" action="{{route('post.update',$post)}}" enctype="multipart/form-data">
             @csrf
@@ -47,5 +46,4 @@
         </form>
     </div>
 </div>
- {{-- 最初に作成した部分ここまで --}}
 </x-app-layout>
