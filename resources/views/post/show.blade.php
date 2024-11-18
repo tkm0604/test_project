@@ -61,7 +61,7 @@
                             {{-- クラスを変更 --}}
                             <p class="float-left pt-4 text-right"> {{ $comment->user->name??"削除されたユーザー" }} • {{$comment->created_at->diffForHumans()}}</p>
                             {{-- アバター追加 --}}
-                            <span class="rounded-full w-12 h-12 mb-2 inline-block ml-auto">
+                            <span class="rounded-full w-12 mb-2 inline-block ml-auto">
                             <img class="rounded-full" src="{{asset('storage/avatar/'.($comment->user->avatar??'user_default.jpg'))}}">
                             </span>
                         </div>
