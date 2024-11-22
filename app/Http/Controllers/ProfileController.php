@@ -39,6 +39,12 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
+        //ダミーユーザーを特定して編集を制限
+        if(auth()->user()->email === 'test01@test.com'){
+            return redirect()->back()->with('error_profile','test01ユーザーはプロフィールの編集はできません');
+        }
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -64,27 +70,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     * ログインユーザー自身のアカウント削除
-     */
-    // public function destroy(Request $request): RedirectResponse
-    // {
-    //     $request->validateWithBag('userDeletion', [
-    //         'password' => ['required', 'current_password'],
-    //     ]);
-
-    //     $user = $request->user();
-
-    //     Auth::logout();
-
-    //     $user->delete();
-
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-
-    //     return Redirect::to('/');
-    // }
 
     public function adedit(User $user)
     {
@@ -142,6 +127,12 @@ class ProfileController extends Controller
     {
 
         $user = $request->user();
+
+        //ダミーユーザーを特定して変更を制限
+        if($user->email === 'test01@test.com'){
+            return redirect()->back()->with('error_delete','test01ユーザーは削除できません');
+        }
+        
         //ログアウト処理
         Auth::logout();
 

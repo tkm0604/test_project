@@ -1,4 +1,10 @@
 <section class="space-y-6">
+        {{-- エラーメッセージの表示 --}}
+        @if (session('error_delete'))
+        <div class="text-red-600 text-sm mb-4">
+            {{ session('error_delete') }}
+        </div>
+        @endif
     <header>
         <h2 class="text-lg font-medium text-gray-900">
             {{ __('アカウントを削除') }}

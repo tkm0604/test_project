@@ -1,4 +1,10 @@
 <section>
+    {{-- エラーメッセージの表示 --}}
+    @if (session('error_profile'))
+    <div class="text-red-600 text-sm mb-4">
+        {{ session('error_profile') }}
+    </div>
+    @endif
     <header>
         <h2 class="text-lg font-medium text-gray-900">
             {{ __('プロフィール情報') }}
@@ -8,7 +14,6 @@
             {{ __("アカウントのプロフィール情報とメールアドレスを更新してください。") }}
         </p>
     </header>
-    {{-- 変更 --}}
     @if(!isset($admin))
         <form id="send-verification" method="post" action="{{ route('verification.send') }}">
             @csrf
@@ -17,7 +22,6 @@
     @else
         <form method="post" action="{{ route('profile.adupdate', $user) }}" class="mt-6 space-y-6" enctype="multipart/form-data">
     @endif
-    {{-- 変更ここまで --}}
         @csrf
         @method('patch')
 
