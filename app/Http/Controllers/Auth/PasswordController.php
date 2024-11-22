@@ -15,6 +15,13 @@ class PasswordController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
+        $user = $request->user();
+
+        //ダミーユーザーを特定して変更を制限
+        if($user->email  === 'test01@test.com'){
+            return redirect()->back()->with('error_password','test01ユーザーはパスワードを変更できません');
+        }
+
         $validated = $request->validateWithBag('updatePassword', [
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
