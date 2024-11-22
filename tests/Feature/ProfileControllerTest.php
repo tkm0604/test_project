@@ -452,4 +452,29 @@ public function test_unauthenticated_user_is_redirected_to_login_when_deleting_u
     $response->assertRedirect(route('login'));
 }
 
+//--------------------------------------------
+// destroy()のテスト user自身で自身のアカウントを削除
+//--------------------------------------------
+
+public function test_destroy_user()
+{
+
+    // 通常ユーザーを作成
+    $user = User::factory()->create();
+
+    //通常ユーザーとしてログイン
+    $this->actingAs($user);
+
+     // destroy メソッドへの DELETE リクエストを実行
+     $response = $this->delete(route('profile.destroy', $user->id));
+
+     // ステータスコードが 302（リダイレクト）であることを確認
+    $response->assertStatus(302);
+
+    //ホームページにリダイレクトされることを確認
+    $response->assertRedirect(route('top'));
+
+}
+
+
 }
