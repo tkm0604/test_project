@@ -136,4 +136,31 @@ class ProfileController extends Controller
         $user->delete();
         return back()->with('message', 'ユーザーを削除しました');
     }
+
+    //userによる自身のアカウント削除
+    public function destroy(Request $request):RedirectResponse
+    {
+
+        $user = $request->user();
+        //ログアウト処理
+        Auth::logout();
+
+        //アバター画像がデフォルトでない場合、削除
+        if($user->avatar !=='user_default.jpg')
+        {
+            $oldavatar = 'avatar/'.$user->avatar;
+            Storage::disk('public')->delete($oldavatar);
+        }
+
+        //ユーザーアカウントを削除
+        $user->delete();
+
+        //セッション無効化
+        $request->session()->invalidate();
+        //CSRFトークンやセッションIDを再生成することで、古いトークンやセッションを無効化し、再利用を防止
+        $request->session()->regenerateToken();
+
+        //ホームページにリダイレクト
+        return Redirect::to('/')->with('status','アカウントを削除しました。');
+    }
 }
